@@ -1,0 +1,26 @@
+version: "3.2"
+
+services:
+  helix-p4d:
+    image: theexeq/helix-p4d:latest
+    hostname: p4d
+    domainname: helix
+    container_name: helix-p4d
+    ports:
+      - "1666:1666"
+    volumes:
+      - ./p4d-home:/p4
+    environment:
+      - NAME=perforce-server
+      - P4NAME=master
+      - P4TCP=1666
+      - P4PORT=1666
+      - P4USER=root
+      - P4PASSWD=rootpwd2023
+      - P4CASE=-C0
+      - P4CHARSET=utf8
+    healthcheck:
+      test: ["CMD", "p4", "info", "-s"]
+      interval: 2m
+      timeout: 10s
+    tty: true
