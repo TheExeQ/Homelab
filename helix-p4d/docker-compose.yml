@@ -2,7 +2,7 @@ version: "3.2"
 
 services:
   helix-p4d:
-    image: theexeq/helix-p4d:latest
+    image: theexeq/helix-p4d:2023.2
     hostname: p4d
     domainname: helix
     container_name: helix-p4d
