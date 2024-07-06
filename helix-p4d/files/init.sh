@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Setup directories
+## Setup directories
 mkdir -p "$P4ROOT"
 mkdir -p "$P4DEPOTS"
 mkdir -p "$P4CKP"
 
-if [ -n "$P4RECOVERCP" ] && [ -n "$P4RECOVERJNL" ]; then
+if [ -e "$P4CKP/$P4RECOVERCP" ] && [ -e "$P4CKP/$P4RECOVERJNL" ]; then
     echo "Restoring checkpoint..."
 	restore.sh
 else

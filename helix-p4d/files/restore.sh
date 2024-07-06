@@ -15,17 +15,15 @@ if [ ! -e "$CP_BAK" ]; then
     exit 255
 fi
 
+if [ ! -e "$CP_BAK" ]; then
+    echo "Error: Checksum $CP_BAK.md5 could not be found."
+    exit 255
+fi
+
 if [ ! -e "$JNL_BAK" ]; then
     echo "Error: $JNL_BAK is not a valid file path."
     exit 255
 fi
-
-## Clean and copy depots backup
-if [ -d "$P4DEPOTS/spec" ]; then
-    rm -rf $P4ROOT/archives/*
-fi
-
-cp -r $P4DEPOTS/* $P4ROOT/archives
 
 ## Remove current data base
 rm -rf $P4DATABASE/*
