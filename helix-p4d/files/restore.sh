@@ -1,35 +1,38 @@
 #!/bin/bash
 
-## Test for latest link
-if [ ! -L "$P4CKP/latest" ]; then
-	echo "Link not found - looking for checkpoint"
-	/usr/local/bin/latest_checkpoint.sh
+if [ ! -d "$P4ROOT/etc" ]; then
+    echo "Error: perforce server is not present, create an empty server before restoring"
+    exit 255
 fi
 
-## Test Checkpoint exists
-if [ ! -L "$P4CKP/latest" ]; then
-	echo "Error: Checkpoint for link $P4CKP/latest not found."
-	exit 255
+## Assign checkpoint and journal variables
+CP_BAK=$P4CKP/$P4RECOVERCP
+JNL_BAK=$P4CKP/$P4RECOVERJNL
+
+## Check if the arguments are valid file paths
+if [ ! -e "$CP_BAK" ]; then
+    echo "Error: $CP_BAK is not a valid file path."
+    exit 255
 fi
 
-## Stop Perforce
-#p4 admin stop
-#until ! p4 info -s 2> /dev/null; do sleep 1; done
+if [ ! -e "$JNL_BAK" ]; then
+    echo "Error: $JNL_BAK is not a valid file path."
+    exit 255
+fi
+
+## Clean and copy depots backup
+if [ -d "$P4DEPOTS/spec" ]; then
+    rm -rf $P4ROOT/archives/*
+fi
+
+cp -r $P4DEPOTS/* $P4ROOT/archives
 
 ## Remove current data base
-rm -rf $P4ROOT/*
+rm -rf $P4DATABASE/*
 
 ## Set server name
-echo $P4NAME > $P4ROOT/server.id
+echo $P4NAME > $P4DATABASE/server.id
 
-## Restore and Upgrade Checkpoint
-p4d $P4CASE -r $P4ROOT -jr -z $P4CKP/latest
-p4d $P4CASE -r $P4ROOT -xu
+p4d $P4CASE -r $P4DATABASE -jr $CP_BAK $JNL_BAK
 
-## Set key environment variables
-p4d $P4CASE -r $P4ROOT "-cset security=2"
-p4d $P4CASE -r $P4ROOT "-cset ${P4NAME}#server.depot.root=${P4DEPOTS}"
-p4d $P4CASE -r $P4ROOT "-cset ${P4NAME}#journalPrefix=${P4CKP}/${JNL_PREFIX}"
-
-## Start Perforce
-p4d $P4CASE -r$P4ROOT -p$P4TCP -L$P4LOG -J$P4JOURNAL -d
+p4d $P4CASE -r $P4DATABASE -p $P4TCP -L $P4LOG -J $P4JOURNAL -d
