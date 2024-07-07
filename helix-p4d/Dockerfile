@@ -44,8 +44,8 @@ ARG P4USER=root
 ARG P4PASSWD=rootpwd2023
 ARG P4CASE=-C0
 ARG P4CHARSET=utf8
-ARG P4RECOVERCP=recover.ckp
-ARG P4RECOVERJNL=recover.jnl
+ARG P4RECOVERCP=latest.ckp
+ARG P4RECOVERJNL=latest.jnl
 
 # Dynamic Environment
 ENV P4NAME=$P4NAME \
