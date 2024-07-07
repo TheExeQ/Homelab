@@ -5,7 +5,7 @@ mkdir -p "$P4ROOT"
 mkdir -p "$P4DEPOTS"
 mkdir -p "$P4CKP"
 
-if [ -e "$P4CKP/$P4RECOVERCP" ] && [ -e "$P4CKP/$P4RECOVERJNL" ]; then
+if [ -e "$P4CKP/$P4LATESTCKP" ] && [ -e "$P4CKP/$P4LATESTJNL" ]; then
     echo "Restoring checkpoint..."
 	restore.sh
 else

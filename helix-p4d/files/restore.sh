@@ -6,17 +6,12 @@ if [ ! -d "$P4ROOT/etc" ]; then
 fi
 
 ## Assign checkpoint and journal variables
-CP_BAK=$P4CKP/$P4RECOVERCP
-JNL_BAK=$P4CKP/$P4RECOVERJNL
+CKP_BAK=$P4CKP/$P4LATESTCKP
+JNL_BAK=$P4CKP/$P4LATESTJNL
 
 ## Check if the arguments are valid file paths
-if [ ! -e "$CP_BAK" ]; then
-    echo "Error: $CP_BAK is not a valid file path."
-    exit 255
-fi
-
-if [ ! -e "$CP_BAK" ]; then
-    echo "Error: Checksum $CP_BAK.md5 could not be found."
+if [ ! -e "$CKP_BAK" ]; then
+    echo "Error: $CKP_BAK is not a valid file path."
     exit 255
 fi
 
@@ -31,6 +26,6 @@ rm -rf $P4DATABASE/*
 ## Set server name
 echo $P4NAME > $P4DATABASE/server.id
 
-p4d $P4CASE -r $P4DATABASE -jr $CP_BAK $JNL_BAK
+p4d $P4CASE -r $P4DATABASE -jr $CKP_BAK $JNL_BAK
 
 p4d $P4CASE -r $P4DATABASE -p $P4TCP -L $P4LOG -J $P4JOURNAL -d
