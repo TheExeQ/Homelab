@@ -13,6 +13,7 @@ services:
     environment:
       - P4NAME=master
       - P4TCP=1666
+      - P4PORT=1666
       - P4USER=root
       - P4PASSWD=rootpwd2023
       - P4CASE=-C0
