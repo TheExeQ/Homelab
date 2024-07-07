@@ -27,5 +27,13 @@ rm -rf $P4DATABASE/*
 echo $P4NAME > $P4DATABASE/server.id
 
 p4d $P4CASE -r $P4DATABASE -jr $CKP_BAK $JNL_BAK
+p4d $P4CASE -r $P4DATABASE -xu
+
+## Make sure perforce has permission to all files
+chown -R perforce:perforce $P4HOME
+
+## Set key environment variables
+p4d $P4CASE -r $P4DATABASE "-cset ${P4NAME}#server.depot.root=${P4DEPOTS}"
+p4d $P4CASE -r $P4DATABASE "-cset ${P4NAME}#journalPrefix=${P4CKP}/${JNL_PREFIX}"
 
 p4d $P4CASE -r $P4DATABASE -p $P4TCP -L $P4LOG -J $P4JOURNAL -d
